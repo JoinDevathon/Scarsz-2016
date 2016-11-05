@@ -42,7 +42,7 @@ public class Pipette {
 
     public void update() {
         Block block = Bukkit.getWorld(world).getBlockAt(location[0], location[1], location[2]);
-        if (!(block instanceof Sign)) {
+        if (!block.getClass().getSimpleName().toLowerCase().contains("sign")) {
             System.out.println("NOT A SIGN YA TARD");
             DevathonPlugin.instance().pipetteBlocks.remove(this);
             return;
