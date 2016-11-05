@@ -16,7 +16,7 @@ class SignListener implements Listener {
     public void onSignChange(SignChangeEvent event) {
         if (!event.getLine(0).equalsIgnoreCase("[pipe]")) return;
 
-        if (event.getPlayer().hasPermission("pipette.build")) {
+        if (event.getPlayer().hasPermission("pipette.build") && !event.getPlayer().isOp()) {
             event.getPlayer().sendMessage(ChatColor.BLUE + "You lack the " + ChatColor.WHITE + "pipette.build" + ChatColor.BLUE + " permission to build pipettes!");
             return;
         }
