@@ -10,7 +10,7 @@ enum Direction {
     UP, DOWN, LEFT, RIGHT;
 
     public static Direction parse(String toParse) {
-        switch (toParse.substring(0, 1)) {
+        switch (toParse.substring(0, 1).toLowerCase()) {
             case "^":
                 return UP;
             case "v":
@@ -22,5 +22,10 @@ enum Direction {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Direction{" + this.name().toLowerCase() + "}";
     }
 }

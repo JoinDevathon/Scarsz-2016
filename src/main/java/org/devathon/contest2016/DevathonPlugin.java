@@ -6,6 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class DevathonPlugin extends JavaPlugin {
 
     public void onEnable() {
+        instance = this;
+
         //TODO less retarded start message
         getLogger().info("Pipette shooting some pipes...");
 
@@ -18,7 +20,10 @@ public class DevathonPlugin extends JavaPlugin {
         getLogger().info("Stabilizing all the things");
     }
 
-
+    static DevathonPlugin instance;
+    public static DevathonPlugin instance() {
+        return instance;
+    }
 
 }
 

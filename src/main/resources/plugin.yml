@@ -4,3 +4,24 @@ version: 1.0.0
 author: Scarsz
 
 main: org.devathon.contest2016.DevathonPlugin
+
+permissions:
+  pipette.*:
+    description: Gives access to all Pipette commands
+    defualt: op
+    children:
+      pipette.build: true
+      pipette.build.item: true
+      pipette.build.liquid: true
+  pipette.build:
+    description: Gives access to building all kinds of pipettes
+    default: false
+    children:
+      pipette.build.item: true
+      pipette.build.liquid: true
+  pipette.build.item:
+    description: Gives access to building item pipettes
+    description: false
+  pipette.build.liquid:
+    description: Gives access to building liquid pipettes
+    default: false
