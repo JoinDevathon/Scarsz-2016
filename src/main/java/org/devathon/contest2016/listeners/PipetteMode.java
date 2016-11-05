@@ -22,4 +22,9 @@ public enum PipetteMode {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Mode{" + name() + "}";
+    }
+
 }

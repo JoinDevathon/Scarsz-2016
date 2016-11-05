@@ -2,6 +2,7 @@ package org.devathon.contest2016;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.devathon.contest2016.blocks.Pipette;
 import org.devathon.contest2016.blocks.PipetteDestination;
 import org.devathon.contest2016.blocks.PipetteInjector;
 import org.devathon.contest2016.etc.SignListener;
@@ -16,8 +17,9 @@ import java.util.ArrayList;
  */
 public class DevathonPlugin extends JavaPlugin {
 
-    ArrayList<PipetteInjector> pipetteInjectionBlocks = new ArrayList<>();
-    ArrayList<PipetteDestination> pipetteDestinationBlocks = new ArrayList<>();
+    public ArrayList<PipetteInjector> pipetteInjectionBlocks = new ArrayList<>();
+    public ArrayList<PipetteDestination> pipetteDestinationBlocks = new ArrayList<>();
+    public ArrayList<Pipette> pipetteBlocks = new ArrayList<>();
 
     public static DevathonPlugin instance;
     public static DevathonPlugin instance() {
