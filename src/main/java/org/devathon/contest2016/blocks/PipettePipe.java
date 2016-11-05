@@ -48,17 +48,17 @@ public class PipettePipe extends Pipette {
         }
 //        BlockState state = block.getState();
 //        Sign sign = (Sign) state;
-//        sign.setLine(0, ChatColor.AQUA + "" + ChatColor.BOLD + "[PIPETTE]");
-//        sign.setLine(1, ChatColor.AQUA + "" + ChatColor.BOLD + "Mode: " + ChatColor.WHITE + "" + ChatColor.BOLD + mode);
-//        sign.setLine(2, ChatColor.AQUA + "" + ChatColor.BOLD + "Linked: " + ChatColor.WHITE + "" + ChatColor.BOLD + (targets.size() > 0));
-//        sign.setLine(3, ChatColor.AQUA + "" + ChatColor.BOLD + "Owner: " + ChatColor.WHITE + "" + ChatColor.BOLD + ownerName);
+//        sign.setLine(0, ChatColor.DARK_RED + "" + ChatColor.BOLD + "[PIPETTE]");
+//        sign.setLine(1, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Mode: " + ChatColor.WHITE + "" + ChatColor.BOLD + mode);
+//        sign.setLine(2, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Linked: " + ChatColor.WHITE + "" + ChatColor.BOLD + (targets.size() > 0));
+//        sign.setLine(3, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Owner: " + ChatColor.WHITE + "" + ChatColor.BOLD + ownerName);
 //        sign.update(true);
 
         SignUtil.setTextOnSign(world, location[0], location[1], location[2],
-                ChatColor.AQUA + "" + ChatColor.BOLD + "[PIPETTE]",
-                ChatColor.AQUA + "" + ChatColor.BOLD + "Mode: " + ChatColor.WHITE + "" + ChatColor.BOLD + mode,
-                ChatColor.AQUA + "" + ChatColor.BOLD + "Linked: " + ChatColor.WHITE + "" + ChatColor.BOLD + (targets.size() > 0),
-                ChatColor.AQUA + "" + ChatColor.BOLD + "Owner: " + ChatColor.WHITE + "" + ChatColor.BOLD + ownerName
+                ChatColor.translateAlternateColorCodes('&', "&4&l[&c&lPIPETTE&4&l]"),
+                ChatColor.translateAlternateColorCodes('&', "&4&lMode: &c&l" + mode.name()),
+                ChatColor.translateAlternateColorCodes('&', "&4&lLinked: &c&l" + (targets.size() > 0)),
+                ChatColor.translateAlternateColorCodes('&', "&4&lOwner: &c&l" + ownerName)
         );
     }
 

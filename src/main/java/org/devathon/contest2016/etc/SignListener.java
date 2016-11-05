@@ -26,7 +26,7 @@ public class SignListener implements Listener {
 
         // make sure player has permission to be building pipetteBlocks
         if (event.getPlayer().hasPermission("pipette.build") && !event.getPlayer().isOp()) {
-            event.getPlayer().sendMessage(ChatColor.AQUA + "You lack the " + ChatColor.WHITE + "pipette.build" + ChatColor.AQUA + " permission to build pipetteBlocks!");
+            event.getPlayer().sendMessage(ChatColor.DARK_RED + "You lack the " + ChatColor.WHITE + "pipette.build" + ChatColor.DARK_RED + " permission to build pipetteBlocks!");
             return;
         }
 
