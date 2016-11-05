@@ -5,13 +5,32 @@ author: Scarsz
 
 main: org.devathon.contest2016.DevathonPlugin
 
+commands:
+  pipette:
+    description: Display help text relating to Pipette
+    aliases: [pipe]
+  pipewand:
+    description: Give yourself the Wand of Linking to connect pipettes together
+    aliases: [pipestaff, pipettewand, pipettestaff]
+    permission: pipette.staff
+  pipestats:
+    description: Show statistics about Pipette
+    aliases: [pipettestats]
+    permission: pipette.stats
+
 permissions:
   pipette.build:
-    description: Gives access to building all kinds of pipettes
+    description: Permission to give  access to building all kinds of pipettes
     default: op
   pipette.build.item:
-    description: Gives access to building item pipettes
+    description: Permission to give  access to building item pipettes
     default: op
   pipette.build.liquid:
-    description: Gives access to building liquid pipettes
+    description: Permission to give access to building liquid pipettes
     default: op
+  pipette.staff:
+    description: Permission to give yourself the Wand of Linking to connect pipettes together
+    default: true
+  pipette.stats:
+    description: Permission to show statistics about Pipette
+    default: true

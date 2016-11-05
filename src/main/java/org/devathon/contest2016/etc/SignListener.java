@@ -40,7 +40,6 @@ public class SignListener implements Listener {
         // create pipette
         PipettePipe createdPipettePipe = new PipettePipe(event.getBlock().getData(), event.getBlock().getLocation(), event.getBlock().getType(), mode, ownerName, ownerUuid);
         DevathonPlugin.instance.pipettePipeBlocks.add(createdPipettePipe);
-        DevathonPlugin.instance.pipettePipeBlocks.get(DevathonPlugin.instance.pipettePipeBlocks.size() - 1).update();
 
         DevathonPlugin.instance.getLogger().info("Player " + event.getPlayer().getName() + " has created a pipette in " + mode + " at " + new PrettyLocation(event.getBlock().getLocation()));
     }
