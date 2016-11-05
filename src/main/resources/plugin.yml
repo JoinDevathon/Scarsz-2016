@@ -1,7 +1,6 @@
-name: Devathon Project
-description: A project for the Devathon contest
+name: Pipette
+description: A project for the Devathon contest... for now.
 version: 1.0.0
-author: Your Name Here
+author: Scarsz
 
 main: org.devathon.contest2016.DevathonPlugin
-
