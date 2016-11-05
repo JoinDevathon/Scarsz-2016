@@ -2,10 +2,11 @@ package org.devathon.contest2016.etc;
 
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.devathon.contest2016.DevathonPlugin;
-import org.devathon.contest2016.blocks.Pipette;
+import org.devathon.contest2016.blocks.PipettePipe;
 import org.devathon.contest2016.listeners.PipetteMode;
 
 import java.util.UUID;
@@ -18,14 +19,14 @@ import java.util.UUID;
  */
 public class SignListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onSignChange(SignChangeEvent event) {
         // make sure the sign creation is suppose to be for us at all
         if (!event.getLine(0).equalsIgnoreCase("[pipe]")) return;
 
         // make sure player has permission to be building pipetteBlocks
         if (event.getPlayer().hasPermission("pipette.build") && !event.getPlayer().isOp()) {
-            event.getPlayer().sendMessage(ChatColor.BLUE + "You lack the " + ChatColor.WHITE + "pipette.build" + ChatColor.BLUE + " permission to build pipetteBlocks!");
+            event.getPlayer().sendMessage(ChatColor.AQUA + "You lack the " + ChatColor.WHITE + "pipette.build" + ChatColor.AQUA + " permission to build pipetteBlocks!");
             return;
         }
 
@@ -37,9 +38,9 @@ public class SignListener implements Listener {
         UUID ownerUuid = event.getPlayer().getUniqueId();
 
         // create pipette
-        Pipette createdPipette = new Pipette(event.getBlock().getData(), event.getBlock().getLocation(), event.getBlock().getType(), mode, ownerName, ownerUuid);
-        DevathonPlugin.instance().pipetteBlocks.add(createdPipette);
-        createdPipette.update();
+        PipettePipe createdPipettePipe = new PipettePipe(event.getBlock().getData(), event.getBlock().getLocation(), event.getBlock().getType(), mode, ownerName, ownerUuid);
+        DevathonPlugin.instance.pipettePipeBlocks.add(createdPipettePipe);
+        DevathonPlugin.instance.pipettePipeBlocks.get(DevathonPlugin.instance.pipettePipeBlocks.size() - 1).update();
 
         DevathonPlugin.instance.getLogger().info("Player " + event.getPlayer().getName() + " has created a pipette in " + mode + " at " + new PrettyLocation(event.getBlock().getLocation()));
     }

@@ -2,7 +2,7 @@ package org.devathon.contest2016;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.devathon.contest2016.blocks.Pipette;
+import org.devathon.contest2016.blocks.PipettePipe;
 import org.devathon.contest2016.blocks.PipetteDestination;
 import org.devathon.contest2016.blocks.PipetteInjector;
 import org.devathon.contest2016.etc.SignListener;
@@ -17,14 +17,11 @@ import java.util.ArrayList;
  */
 public class DevathonPlugin extends JavaPlugin {
 
-    public ArrayList<PipetteInjector> pipetteInjectionBlocks = new ArrayList<>();
+    public ArrayList<PipettePipe> pipettePipeBlocks = new ArrayList<>();
     public ArrayList<PipetteDestination> pipetteDestinationBlocks = new ArrayList<>();
-    public ArrayList<Pipette> pipetteBlocks = new ArrayList<>();
+    public ArrayList<PipetteInjector> pipetteInjectionBlocks = new ArrayList<>();
 
     public static DevathonPlugin instance;
-    public static DevathonPlugin instance() {
-        return instance;
-    }
 
     public void onEnable() {
         instance = this;
@@ -34,6 +31,11 @@ public class DevathonPlugin extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new SignListener(), this);
 
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            pipettePipeBlocks.forEach(PipettePipe::update);
+            pipetteDestinationBlocks.forEach(PipetteDestination::update);
+            pipetteInjectionBlocks.forEach(PipetteInjector::update);
+        }, 0, 20);
     }
 
     public void onDisable() {
