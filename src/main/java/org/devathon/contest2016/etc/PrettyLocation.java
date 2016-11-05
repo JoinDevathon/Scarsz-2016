@@ -1,4 +1,4 @@
-package org.devathon.contest2016;
+package org.devathon.contest2016.etc;
 
 import org.bukkit.Location;
 
@@ -8,10 +8,10 @@ import org.bukkit.Location;
  * @in /dev/hell
  * @at 11/5/2016
  */
-class PrettyLocation {
+public class PrettyLocation {
 
     private Location location;
-    PrettyLocation(Location location) {
+    public PrettyLocation(Location location) {
         this.location = location;
     }
 
