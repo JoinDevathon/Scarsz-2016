@@ -3,6 +3,12 @@ package org.devathon.contest2016;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * Made by Scarsz
+ *
+ * @in /dev/hell
+ * @at 11/5/2016
+ */
 public class DevathonPlugin extends JavaPlugin {
 
     public void onEnable() {

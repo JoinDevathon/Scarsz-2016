@@ -2,6 +2,7 @@ package org.devathon.contest2016;
 
 /**
  * Made by Scarsz
+ *
  * @in /dev/hell
  * @at 11/5/2016
  */
