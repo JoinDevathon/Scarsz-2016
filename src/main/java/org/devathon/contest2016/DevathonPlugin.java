@@ -26,9 +26,12 @@ import java.util.concurrent.TimeUnit;
  */
 public class DevathonPlugin extends JavaPlugin {
 
+    private static final boolean debug = false;
+
     public ArrayList<Object> pipetteBlocks = new ArrayList<>();
     public Map<UUID, UUID> playersLinks = new HashMap<>();
 
+    //TODO make this actually work
     public Map<String, Object> statistics = new HashMap<String, Object>() {{
         put("Items transported", 723856);
     }};
@@ -67,7 +70,7 @@ public class DevathonPlugin extends JavaPlugin {
                 long startTime = System.nanoTime(); // get start time before pipette tick
                 ((PipetteSender) pipette).tick(); // tick pipette to send bath of items
                 long elapsedNanos = System.nanoTime() - startTime; // find out how much time has elapsed
-                getLogger().info("Tick for " + pipette + " took " + elapsedNanos + " nanoseconds (" + ((TimeUnit.NANOSECONDS.toMillis(elapsedNanos) / 50d) * 100d) + "% of a tick, 20 total)");
+                if (DevathonPlugin.debug) getLogger().info("Tick for " + pipette + " took " + elapsedNanos + "ns [" + ((TimeUnit.NANOSECONDS.toMillis(elapsedNanos) / 50d) * 100d) + "% of a tick; 20 total ticks per second]");
             }
         }), 0, 20); // 20 ticks / 20 TPS = 1 second
 

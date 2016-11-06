@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
 import org.devathon.contest2016.DevathonPlugin;
 
 import java.util.ArrayList;
@@ -47,6 +49,20 @@ public class Pipette {
         return Bukkit.getWorld(world).getBlockAt(location[0], location[1], location[2]);
     }
 
+    public Pipette getRandomTarget() {
+        int indexToGet = DevathonPlugin.instance.random.nextInt(targets.size());
+
+        return mode == PipetteMode.DESTINATION
+                ? this
+                : DevathonPlugin.instance.getPipetteAtLocation(targets.get(indexToGet).getLocation());
+    }
+
+    public void passItemStackOn(ItemStack itemStackToMove) {
+        Item droppedItem = getBlock().getWorld().dropItem(getBlock().getLocation(), new ItemStack(itemStackToMove.getType(), 0));
+        Bukkit.getScheduler().scheduleSyncDelayedTask(DevathonPlugin.instance, droppedItem::remove, 5);
+        getRandomTarget().passItemStackOn(itemStackToMove);
+    }
+
     public void recalculateTargets() {
         ArrayList<Block> newTargets = new ArrayList<>();
         for (Block target : targets) {
@@ -55,6 +71,7 @@ public class Pipette {
         }
         targets = newTargets;
     }
+
     public void recalculateTargetsMe() {
         ArrayList<Block> newTargetsMe = new ArrayList<>();
         for (Object pipetteBlock : DevathonPlugin.instance.pipetteBlocks) {
@@ -67,10 +84,12 @@ public class Pipette {
     @Override
     public String toString() {
         return "Pipette{" +
-                "location=" + new PrettyLocation(world, location) +
-                ", mode=" + mode +
+                new PrettyLocation(world, location) +
+                ", " + mode +
+                ", targets=" + targets.size() +
+                ", links=" + (targets.size() + targetsMe.size()) +
                 ", ownerName='" + ownerName + '\'' +
-                ", ownerUuid=" + ownerUuid +
                 '}';
     }
+
 }
