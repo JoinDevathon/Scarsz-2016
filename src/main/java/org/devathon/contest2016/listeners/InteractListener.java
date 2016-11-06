@@ -40,14 +40,18 @@ public class InteractListener implements Listener {
             } else {
                 Pipette source = DevathonPlugin.instance.getLinkingPipetteFromPlayerUuid(event.getPlayer().getUniqueId());
                 Pipette target = DevathonPlugin.instance.getPipetteAtLocation(event.getClickedBlock().getLocation());
-                if (source.targets.contains(event.getClickedBlock())) {
-                    source.targets.remove(event.getClickedBlock());
-                    target.recalculateTargetsMe();
-                    event.getPlayer().sendMessage(ChatColor.RED + "You've removed this pipette from another pipette's targets! The pipettes are now unlinked.");
+                if (source.location == target.location) {
+                    event.getPlayer().sendMessage(ChatColor.RED + "You can't link a pipette to itself. Don't divide by 0.");
                 } else {
-                    source.targets.add(event.getClickedBlock());
-                    target.targetsMe.add(source.getBlock());
-                    event.getPlayer().sendMessage(ChatColor.RED + "You've pasted another pipette's information to this pipette! The pipettes are now linked.");
+                    if (source.targets.contains(event.getClickedBlock())) {
+                        source.targets.remove(event.getClickedBlock());
+                        target.recalculateTargetsMe();
+                        event.getPlayer().sendMessage(ChatColor.RED + "You've removed this pipette from another pipette's targets! The pipettes are now unlinked.");
+                    } else {
+                        source.targets.add(event.getClickedBlock());
+                        target.targetsMe.add(source.getBlock());
+                        event.getPlayer().sendMessage(ChatColor.RED + "You've pasted another pipette's information to this pipette! The pipettes are now linked.");
+                    }
                 }
             }
         }
