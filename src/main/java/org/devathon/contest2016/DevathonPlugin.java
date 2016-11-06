@@ -10,7 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.devathon.contest2016.etc.Pipette;
-import org.devathon.contest2016.etc.SignListener;
+import org.devathon.contest2016.etc.PrettyLocation;
+import org.devathon.contest2016.listeners.SignListener;
 import org.devathon.contest2016.listeners.InteractListener;
 
 import java.util.*;
@@ -40,11 +41,22 @@ public class DevathonPlugin extends JavaPlugin {
         //TODO less retarded start message
         getLogger().info("Pipette shooting some pipes...");
 
-        Bukkit.getPluginManager().registerEvents(new SignListener(), this); // sign edits
         Bukkit.getPluginManager().registerEvents(new InteractListener(), this); // interact events (for linking stuff)
+        Bukkit.getPluginManager().registerEvents(new SignListener(), this); // sign edits
 
         // setup task to automatically update all signs every 5 seconds
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> pipetteBlocks.forEach(o -> ((Pipette) o).update()), 0, 100); // 100 ticks / 20 TPS = 5 seconds
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            List<Pipette> pipettesToRemove = new ArrayList<>();
+            pipetteBlocks.forEach(pipetteObject -> {
+                Pipette pipette = (Pipette) pipetteObject;
+                if (!pipette.update()) { // pipette was broken or something, clean it up
+                    getLogger().info("Cleaning up pipette @ " + new PrettyLocation(pipette.getBlock().getLocation()));
+                    pipettesToRemove.add(pipette);
+                    pipette.targetsMe.forEach(block -> ((Pipette) block).recalculateTargets());
+                }
+            });
+            pipetteBlocks.removeAll(pipettesToRemove);
+        }, 0, 100); // 100 ticks / 20 TPS = 5 seconds
 
         getCommand("pipette").setExecutor((commandSender, command, label, args) -> {
             commandSender.sendMessage(new String[] {
@@ -85,21 +97,15 @@ public class DevathonPlugin extends JavaPlugin {
         getLogger().info("Stabilizing all the things...");
     }
 
-    public Pipette getPipetteAtLocation(String world, int x, int y, int z) {
-        return getPipetteAtLocation(new Location(Bukkit.getWorld(world), x, y, z));
-    }
     public Pipette getPipetteAtLocation(Location location) {
         for (Object pipetteBlock : pipetteBlocks) {
             Pipette pipette = (Pipette) pipetteBlock;
             if (pipette.getBlock().getLocation().getBlockX() == location.getBlockX() &&
                 pipette.getBlock().getLocation().getBlockY() == location.getBlockY() &&
                 pipette.getBlock().getLocation().getBlockZ() == location.getBlockZ()) {
-
-                System.out.println("not null");
                 return pipette;
             }
         }
-        System.out.println("null");
         return null;
     }
 

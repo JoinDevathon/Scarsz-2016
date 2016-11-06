@@ -3,7 +3,7 @@ package org.devathon.contest2016.blocks;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.devathon.contest2016.etc.Pipette;
-import org.devathon.contest2016.listeners.PipetteMode;
+import org.devathon.contest2016.etc.PipetteMode;
 
 import java.util.UUID;
 

@@ -5,7 +5,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.devathon.contest2016.DevathonPlugin;
-import org.devathon.contest2016.listeners.PipetteMode;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -40,12 +39,24 @@ public class Pipette {
         this.world = location.getWorld().getName();
     }
 
-    public void update() {}
+    /**
+     * Update the pipette's sign with information regarding it
+     * @return whether or not the update was successful. a false value should indicate the pipette should be unregistered.
+     */
+    public boolean update() { return true; }
 
     public Block getBlock() {
         return Bukkit.getWorld(world).getBlockAt(location[0], location[1], location[2]);
     }
 
+    public void recalculateTargets() {
+        ArrayList<Block> newTargets = new ArrayList<>();
+        for (Block target : targets) {
+            if (DevathonPlugin.instance.pipetteBlocks.contains(DevathonPlugin.instance.getPipetteAtLocation(target.getLocation())))
+                newTargets.add(target);
+        }
+        targets = newTargets;
+    }
     public void recalculateTargetsMe() {
         ArrayList<Block> newTargetsMe = new ArrayList<>();
         for (Object pipetteBlock : DevathonPlugin.instance.pipetteBlocks) {

@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.devathon.contest2016.DevathonPlugin;
 import org.devathon.contest2016.etc.Pipette;
 
@@ -21,13 +20,11 @@ public class InteractListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getItem() == null ||
-            event.getItem().getType() != Material.STICK || // make sure it's a stick
-            event.getItem().getItemMeta().getDisplayName() == null || // make sure it has an actual name
-            !event.getItem().getItemMeta().getDisplayName().contains("Wand of Linking") || // make sure it's our wand
-            event.getItem().getItemMeta().getEnchantLevel(Enchantment.DIG_SPEED) != 100 || // make sure it has the op enchantment
-            (event.getClickedBlock() != null && event.getClickedBlock().getType() != Material.SIGN_POST && event.getClickedBlock().getType() != Material.WALL_SIGN) || // make sure they interacted with a sign
-            event.getHand() != EquipmentSlot.HAND) {
+        if (event.getItem() == null || event.getItem().getItemMeta() == null || !event.getItem().getItemMeta().hasDisplayName() || !event.getItem().getItemMeta().getDisplayName().contains("Wand of Linking") || event.getItem().getItemMeta().getEnchantLevel(Enchantment.DIG_SPEED) != 100) {
+            return;
+        }
+        if (event.getClickedBlock() != null && event.getClickedBlock().getType() != Material.SIGN_POST && event.getClickedBlock().getType() != Material.WALL_SIGN) {
+            event.getPlayer().sendMessage(ChatColor.RED + "You can only link signs.");
             return;
         }
         event.setCancelled(true);

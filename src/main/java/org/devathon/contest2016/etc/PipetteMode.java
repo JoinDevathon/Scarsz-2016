@@ -1,4 +1,4 @@
-package org.devathon.contest2016.listeners;
+package org.devathon.contest2016.etc;
 
 /**
  * Made by Scarsz
