@@ -1,6 +1,5 @@
 package org.devathon.contest2016.util;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.devathon.contest2016.DevathonPlugin;
@@ -13,9 +12,6 @@ import org.devathon.contest2016.DevathonPlugin;
  */
 public class SignUtil {
 
-    public static void setTextOnSign(String world, int x, int y, int z, String... lines) {
-        setTextOnSign(new Location(Bukkit.getWorld(world), x, y, z), lines);
-    }
     public static void setTextOnSign(Location location, String... lines) {
         if (!(location.getBlock().getState() instanceof Sign)) {
             DevathonPlugin.instance.getLogger().warning("Tried setting lines of sign to a location that wasn't a sign :OOOO");

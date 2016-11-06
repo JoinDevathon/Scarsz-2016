@@ -20,13 +20,16 @@ public class InteractListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getItem() == null || event.getItem().getItemMeta() == null || !event.getItem().getItemMeta().hasDisplayName() || !event.getItem().getItemMeta().getDisplayName().contains("Wand of Linking") || event.getItem().getItemMeta().getEnchantLevel(Enchantment.DIG_SPEED) != 100) {
-            return;
-        }
+        // only do stuff if it was our wand that was right clicked with
+        if (event.getItem() == null || event.getItem().getItemMeta() == null || !event.getItem().getItemMeta().hasDisplayName() || !event.getItem().getItemMeta().getDisplayName().contains("Wand of Linking") || event.getItem().getItemMeta().getEnchantLevel(Enchantment.DIG_SPEED) != 100) return;
+
+        // only do stuff if the interacted with block is a sign
         if (event.getClickedBlock() != null && event.getClickedBlock().getType() != Material.SIGN_POST && event.getClickedBlock().getType() != Material.WALL_SIGN) {
             event.getPlayer().sendMessage(ChatColor.RED + "You can only link signs.");
             return;
         }
+
+        // set the event to cancelled because if we left clicked a pipette we didn't actually want to break it
         event.setCancelled(true);
 
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
