@@ -39,14 +39,16 @@ public class InteractListener implements Listener {
         } else {
             // player wants this sign to be linked as a target to another
             if (!DevathonPlugin.instance.playersLinks.containsKey(event.getPlayer().getUniqueId())) {
-                event.getPlayer().sendMessage(ChatColor.RED + "You don't have any pipette information in your clipboard! Copy it from another pipette by left clicking it.");
+                event.getPlayer().sendMessage(ChatColor.DARK_RED + "You don't have any pipette information in your clipboard! Copy it from another pipette by left clicking it.");
             } else {
                 Pipette source = DevathonPlugin.instance.getLinkingPipetteFromPlayerUuid(event.getPlayer().getUniqueId());
                 Pipette target = DevathonPlugin.instance.getPipetteAtLocation(event.getClickedBlock().getLocation());
-                if (source.location == target.location) {
-                    event.getPlayer().sendMessage(ChatColor.RED + "You can't link a pipette to itself. Don't divide by 0.");
+                if (source.getBlock().getLocation().distance(target.getBlock().getLocation()) > 1) {
+                    event.getPlayer().sendMessage(ChatColor.DARK_RED + "Your source and target pipettes are not next to each other. Pipes usually don't have spaces in them.");
+                } else if (source.location == target.location) {
+                    event.getPlayer().sendMessage(ChatColor.DARK_RED + "You can't link a pipette to itself. Don't divide by 0.");
                 } else if (target.targets.contains(source.getBlock())) {
-                    event.getPlayer().sendMessage(ChatColor.RED + "The target pipette is already targeting the source pipette. You're trying to make an infinite circle, eh?");
+                    event.getPlayer().sendMessage(ChatColor.DARK_RED + "The target pipette is already targeting the source pipette. You're trying to make an infinite circle, eh?");
                 } else {
                     if (source.targets.contains(event.getClickedBlock())) {
                         source.targets.remove(event.getClickedBlock());
