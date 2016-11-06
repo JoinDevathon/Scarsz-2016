@@ -61,17 +61,15 @@ public class DevathonPlugin extends JavaPlugin {
         }, 0, 100); // 100 ticks / 20 TPS = 5 seconds
 
         // setup task to automatically update all signs every 5 seconds
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            pipetteBlocks.forEach(pipetteObject -> {
-                Pipette pipette = (Pipette) pipetteObject;
-                if (pipette.mode == PipetteMode.SEND) { // pipette is a sender
-                    long startTime = System.nanoTime();
-                    ((PipetteSender) pipette).tick();
-                    long elapsedNanos = System.nanoTime() - startTime;
-                    getLogger().info("Tick for " + pipette + " took " + elapsedNanos + " nanoseconds (" + TimeUnit.NANOSECONDS.toMillis(elapsedNanos)/50d + "% of tick)");
-                }
-            });
-        }, 0, 100); // 100 ticks / 20 TPS = 5 seconds
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> pipetteBlocks.forEach(pipetteObject -> {
+            Pipette pipette = (Pipette) pipetteObject;
+            if (pipette.mode == PipetteMode.SEND) { // pipette is a sender
+                long startTime = System.nanoTime(); // get start time before pipette tick
+                ((PipetteSender) pipette).tick(); // tick pipette to send bath of items
+                long elapsedNanos = System.nanoTime() - startTime; // find out how much time has elapsed
+                getLogger().info("Tick for " + pipette + " took " + elapsedNanos + " nanoseconds (" + ((TimeUnit.NANOSECONDS.toMillis(elapsedNanos) / 50d) * 100d) + "% of a tick, 20 total)");
+            }
+        }), 0, 20); // 20 ticks / 20 TPS = 1 second
 
         getCommand("pinksheep").setExecutor((commandSender, command, label, args) -> {
             String message = "B";
