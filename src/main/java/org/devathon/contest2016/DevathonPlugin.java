@@ -1,11 +1,10 @@
 package org.devathon.contest2016;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sheep;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -58,6 +57,24 @@ public class DevathonPlugin extends JavaPlugin {
             pipetteBlocks.removeAll(pipettesToRemove);
         }, 0, 100); // 100 ticks / 20 TPS = 5 seconds
 
+        getCommand("pinksheep").setExecutor((commandSender, command, label, args) -> {
+            String message = "B";
+            int aCount = random.nextInt(100);
+            for (int i = 0; i < aCount; i++) message += "a";
+
+            commandSender.sendMessage(ChatColor.values()[random.nextInt(16)] + message);
+
+            List<Player> targets = new ArrayList<>();
+            if (!(commandSender instanceof Player)) {
+                targets.addAll(Bukkit.getOnlinePlayers());
+                return true;
+            } else targets.add((Player) commandSender);
+
+            for (Player target : targets) ((Sheep) target.getWorld().spawnEntity(target.getLocation(), EntityType.SHEEP)).setColor(DyeColor.PINK);
+
+            return true;
+        });
+        //TODO make header not duplicate code
         getCommand("pipette").setExecutor((commandSender, command, label, args) -> {
             commandSender.sendMessage(new String[] {
                     ChatColor.translateAlternateColorCodes('&', "&4===================================================="),

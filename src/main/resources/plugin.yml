@@ -6,6 +6,9 @@ author: Scarsz
 main: org.devathon.contest2016.DevathonPlugin
 
 commands:
+  pinksheep:
+    description: Don't ask.
+    default: false
   pipette:
     description: Display help text relating to Pipette
     aliases: [pipe]
