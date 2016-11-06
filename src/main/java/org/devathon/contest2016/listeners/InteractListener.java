@@ -45,6 +45,8 @@ public class InteractListener implements Listener {
                 Pipette target = DevathonPlugin.instance.getPipetteAtLocation(event.getClickedBlock().getLocation());
                 if (source.location == target.location) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You can't link a pipette to itself. Don't divide by 0.");
+                } else if (target.targets.contains(source.getBlock())) {
+                    event.getPlayer().sendMessage(ChatColor.RED + "The target pipette is already targeting the source pipette. You're trying to make an infinite circle, eh?");
                 } else {
                     if (source.targets.contains(event.getClickedBlock())) {
                         source.targets.remove(event.getClickedBlock());
