@@ -8,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.devathon.contest2016.DevathonPlugin;
+import org.devathon.contest2016.blocks.PipetteDestination;
+import org.devathon.contest2016.blocks.PipetteSender;
 import org.devathon.contest2016.blocks.PipettePipe;
 import org.devathon.contest2016.etc.Pipette;
 import org.devathon.contest2016.etc.PipetteMode;
@@ -42,8 +44,21 @@ public class SignListener implements Listener {
         UUID ownerUuid = event.getPlayer().getUniqueId();
 
         // create pipette
-        PipettePipe createdPipettePipe = new PipettePipe(event.getBlock().getData(), event.getBlock().getLocation(), event.getBlock().getType(), mode, ownerName, ownerUuid);
-        DevathonPlugin.instance.pipetteBlocks.add(createdPipettePipe);
+        Pipette createdPipette = null;
+        switch (mode) {
+            case ITEM:
+            case LIQUID:
+            case BOTH:
+                createdPipette = new PipettePipe(event.getBlock().getLocation(), mode, ownerName, ownerUuid);
+                break;
+            case DESTINATION:
+                createdPipette = new PipetteDestination(event.getBlock().getLocation(), mode, ownerName, ownerUuid);
+                break;
+            case SEND:
+                createdPipette = new PipetteSender(event.getBlock().getLocation(), mode, ownerName, ownerUuid);
+                break;
+        }
+        DevathonPlugin.instance.pipetteBlocks.add(createdPipette);
 
         DevathonPlugin.instance.getLogger().info("Player " + event.getPlayer().getName() + " has created a pipette in " + mode + " at " + new PrettyLocation(event.getBlock().getLocation()));
     }
@@ -51,7 +66,7 @@ public class SignListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
         Pipette target = DevathonPlugin.instance.getPipetteAtLocation(event.getBlock().getLocation());
-        if (target == null) { DevathonPlugin.instance.getLogger().info("Pipette @ " + new PrettyLocation(event.getBlock().getLocation()) + " destroyed"); return; }
+        if (target == null) return;
         DevathonPlugin.instance.pipetteBlocks.remove(target);
         for (Block block : target.targets) DevathonPlugin.instance.getPipetteAtLocation(block.getLocation()).recalculateTargetsMe();
         for (Block block : target.targetsMe) DevathonPlugin.instance.getPipetteAtLocation(block.getLocation()).recalculateTargets();

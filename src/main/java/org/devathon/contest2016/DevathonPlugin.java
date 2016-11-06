@@ -8,12 +8,15 @@ import org.bukkit.entity.Sheep;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.devathon.contest2016.blocks.PipetteSender;
 import org.devathon.contest2016.etc.Pipette;
+import org.devathon.contest2016.etc.PipetteMode;
 import org.devathon.contest2016.etc.PrettyLocation;
-import org.devathon.contest2016.listeners.SignListener;
 import org.devathon.contest2016.listeners.InteractListener;
+import org.devathon.contest2016.listeners.SignListener;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Made by Scarsz
@@ -43,7 +46,7 @@ public class DevathonPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new InteractListener(), this); // interact events (for linking stuff)
         Bukkit.getPluginManager().registerEvents(new SignListener(), this); // sign edits
 
-        // setup task to automatically update all signs every 5 seconds
+        // setup task to automatically update all signs
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             List<Pipette> pipettesToRemove = new ArrayList<>();
             pipetteBlocks.forEach(pipetteObject -> {
@@ -55,6 +58,19 @@ public class DevathonPlugin extends JavaPlugin {
                 }
             });
             pipetteBlocks.removeAll(pipettesToRemove);
+        }, 0, 100); // 100 ticks / 20 TPS = 5 seconds
+
+        // setup task to automatically update all signs every 5 seconds
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            pipetteBlocks.forEach(pipetteObject -> {
+                Pipette pipette = (Pipette) pipetteObject;
+                if (pipette.mode == PipetteMode.SEND) { // pipette is a sender
+                    long startTime = System.nanoTime();
+                    ((PipetteSender) pipette).tick();
+                    long elapsedNanos = System.nanoTime() - startTime;
+                    getLogger().info("Tick for " + pipette + " took " + elapsedNanos + " nanoseconds (" + TimeUnit.NANOSECONDS.toMillis(elapsedNanos)/50d + "% of tick)");
+                }
+            });
         }, 0, 100); // 100 ticks / 20 TPS = 5 seconds
 
         getCommand("pinksheep").setExecutor((commandSender, command, label, args) -> {

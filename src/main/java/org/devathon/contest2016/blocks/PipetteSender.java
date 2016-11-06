@@ -14,9 +14,9 @@ import java.util.UUID;
  * @in /dev/hell
  * @at 11/5/2016
  */
-public class PipettePipe extends Pipette {
+public class PipetteSender extends Pipette {
 
-    public PipettePipe(Location location, PipetteMode mode, String ownerName, UUID ownerUuid) {
+    public PipetteSender(Location location, PipetteMode mode, String ownerName, UUID ownerUuid) {
         super(location, mode, ownerName, ownerUuid);
     }
 
@@ -26,11 +26,15 @@ public class PipettePipe extends Pipette {
         //TODO add some sort of way to view links of a pipette, maybe snag code from WorldGuard/projection shovels
         SignUtil.setTextOnSign(getBlock().getLocation(),
                 ChatColor.translateAlternateColorCodes('&', "&4&l[&c&lPIPETTE&4&l]"),
-                ChatColor.translateAlternateColorCodes('&', "&4&lMode: &c&l" + mode.name()),
+                ChatColor.translateAlternateColorCodes('&', "&4&lMode: &c&l" + mode.name().substring(0, 4)),
                 ChatColor.translateAlternateColorCodes('&', "&4&lLinks: &c&l" + (targets.size() + targetsMe.size())),
                 ChatColor.translateAlternateColorCodes('&', "&4&lOwner: &c&l" + ownerName)
         );
         return true;
+    }
+
+    public void tick() {
+
     }
 
 }

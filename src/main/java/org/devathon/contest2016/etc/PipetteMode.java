@@ -7,7 +7,7 @@ package org.devathon.contest2016.etc;
  * @at 11/5/2016
  */
 public enum PipetteMode {
-    ITEM, LIQUID, BOTH;
+    ITEM, LIQUID, BOTH, SEND, DESTINATION;
 
     public static PipetteMode parse(String line) {
         // if player hasn't given us a mode assume that we want to transport everything
@@ -18,7 +18,9 @@ public enum PipetteMode {
             case "b": return BOTH; // user wants to transport everything
             case "i": return ITEM; // user wants to only transport items
             case "l": return LIQUID; // user wants to only transport liquids
-            default: return BOTH; // user is stupid
+            case "d": return DESTINATION; // user wants to have items be sent here
+            case "s": return SEND; // user wants to have items sent from here
+            default: return BOTH; // user is stupid or is smart enough to not put a mode
         }
     }
 
