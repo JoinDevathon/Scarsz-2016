@@ -2,16 +2,16 @@ package org.devathon.contest2016;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.devathon.contest2016.blocks.PipetteDestination;
-import org.devathon.contest2016.blocks.PipetteInjector;
-import org.devathon.contest2016.blocks.PipettePipe;
+import org.devathon.contest2016.etc.Pipette;
 import org.devathon.contest2016.etc.SignListener;
+import org.devathon.contest2016.listeners.InteractListener;
 
 import java.util.*;
 
@@ -23,15 +23,15 @@ import java.util.*;
  */
 public class DevathonPlugin extends JavaPlugin {
 
-    public ArrayList<PipettePipe> pipettePipeBlocks = new ArrayList<>();
-    public ArrayList<PipetteDestination> pipetteDestinationBlocks = new ArrayList<>();
-    public ArrayList<PipetteInjector> pipetteInjectionBlocks = new ArrayList<>();
+    public ArrayList<Object> pipetteBlocks = new ArrayList<>();
+    public Map<UUID, UUID> playersLinks = new HashMap<>();
 
-    public static Map<String, Object> statistics = new HashMap<String, Object>() {{
+    public Map<String, Object> statistics = new HashMap<String, Object>() {{
         put("Items transported", 723856);
     }};
 
     public static DevathonPlugin instance;
+    public static Random random = new Random();
 
     public void onEnable() {
         // set static instance of the plugin to use in other classes
@@ -40,15 +40,11 @@ public class DevathonPlugin extends JavaPlugin {
         //TODO less retarded start message
         getLogger().info("Pipette shooting some pipes...");
 
-        // register sign edit events
-        Bukkit.getPluginManager().registerEvents(new SignListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SignListener(), this); // sign edits
+        Bukkit.getPluginManager().registerEvents(new InteractListener(), this); // interact events (for linking stuff)
 
         // setup task to automatically update all signs every 5 seconds
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            pipettePipeBlocks.forEach(PipettePipe::update);
-            pipetteDestinationBlocks.forEach(PipetteDestination::update);
-            pipetteInjectionBlocks.forEach(PipetteInjector::update);
-        }, 0, 100); // 100 ticks / 20 TPS = 5 seconds
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> pipetteBlocks.forEach(o -> ((Pipette) o).update()), 0, 100); // 100 ticks / 20 TPS = 5 seconds
 
         getCommand("pipette").setExecutor((commandSender, command, label, args) -> {
             commandSender.sendMessage(new String[] {
@@ -87,6 +83,37 @@ public class DevathonPlugin extends JavaPlugin {
     public void onDisable() {
         //TODO less retarded stop message
         getLogger().info("Stabilizing all the things...");
+    }
+
+    public Pipette getPipetteAtLocation(String world, int x, int y, int z) {
+        return getPipetteAtLocation(new Location(Bukkit.getWorld(world), x, y, z));
+    }
+    public Pipette getPipetteAtLocation(Location location) {
+        for (Object pipetteBlock : pipetteBlocks) {
+            Pipette pipette = (Pipette) pipetteBlock;
+            if (pipette.getBlock().getLocation().getBlockX() == location.getBlockX() &&
+                pipette.getBlock().getLocation().getBlockY() == location.getBlockY() &&
+                pipette.getBlock().getLocation().getBlockZ() == location.getBlockZ()) {
+
+                System.out.println("not null");
+                return pipette;
+            }
+        }
+        System.out.println("null");
+        return null;
+    }
+
+    public Pipette getLinkingPipetteFromPlayerUuid(UUID playerUuid) {
+        return getPipetteFromPipetteUuid(playersLinks.get(playerUuid));
+    }
+
+    public Pipette getPipetteFromPipetteUuid(UUID uuid) {
+        if (uuid == null) return null;
+        for (Object pipetteBlock : pipetteBlocks) {
+            Pipette pipette = (Pipette) pipetteBlock;
+            if (pipette.uuid == uuid) return pipette;
+        }
+        return null;
     }
 
     private static void givePlayerWandOfLinking(Player player) {

@@ -1,16 +1,13 @@
 package org.devathon.contest2016.blocks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.devathon.contest2016.DevathonPlugin;
 import org.devathon.contest2016.etc.Pipette;
 import org.devathon.contest2016.listeners.PipetteMode;
 import org.devathon.contest2016.util.SignUtil;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -21,29 +18,13 @@ import java.util.UUID;
  */
 public class PipettePipe extends Pipette {
 
-    public byte data;
-    public int[] location;
-    public Material material;
-    public PipetteMode mode;
-    public String ownerName;
-    public UUID ownerUuid;
-    public ArrayList<Block> targets = new ArrayList<>();
-    public String world;
-
     public PipettePipe(byte data, Location location, Material material, PipetteMode mode, String ownerName, UUID ownerUuid) {
-        this.data = data;
-        this.location = new int[]{ location.getBlockX(), location.getBlockY(), location.getBlockZ() };
-        this.material = material;
-        this.mode = mode;
-        this.ownerName = ownerName;
-        this.ownerUuid = ownerUuid;
-        this.world = location.getWorld().getName();
+        super(data, location, material, mode, ownerName, ownerUuid);
     }
 
     public void update() {
-        Block block = Bukkit.getWorld(world).getBlockAt(location[0], location[1], location[2]);
-        if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN) {
-            DevathonPlugin.instance.pipettePipeBlocks.remove(this);
+        if (getBlock().getType() != Material.SIGN_POST && getBlock().getType() != Material.WALL_SIGN) {
+            DevathonPlugin.instance.pipetteBlocks.remove(this);
             return;
         }
 //        BlockState state = block.getState();
@@ -54,10 +35,10 @@ public class PipettePipe extends Pipette {
 //        sign.setLine(3, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Owner: " + ChatColor.WHITE + "" + ChatColor.BOLD + ownerName);
 //        sign.update(true);
 
-        SignUtil.setTextOnSign(world, location[0], location[1], location[2],
+        SignUtil.setTextOnSign(getBlock().getLocation(),
                 ChatColor.translateAlternateColorCodes('&', "&4&l[&c&lPIPETTE&4&l]"),
                 ChatColor.translateAlternateColorCodes('&', "&4&lMode: &c&l" + mode.name()),
-                ChatColor.translateAlternateColorCodes('&', "&4&lLinked: &c&l" + (targets.size() > 0)),
+                ChatColor.translateAlternateColorCodes('&', "&4&lLinked: &c&l" + (targets.size() > 0 || targetsMe.size() > 0)),
                 ChatColor.translateAlternateColorCodes('&', "&4&lOwner: &c&l" + ownerName)
         );
     }
