@@ -17,9 +17,7 @@ import java.util.UUID;
  */
 public class Pipette {
 
-    public byte data;
     public int[] location;
-    public Material material;
     public PipetteMode mode;
     public String ownerName;
     public UUID ownerUuid;
@@ -28,10 +26,8 @@ public class Pipette {
     public UUID uuid;
     public String world;
 
-    public Pipette(byte data, Location location, Material material, PipetteMode mode, String ownerName, UUID ownerUuid) {
-        this.data = data;
+    public Pipette(Location location, PipetteMode mode, String ownerName, UUID ownerUuid) {
         this.location = new int[]{ location.getBlockX(), location.getBlockY(), location.getBlockZ() };
-        this.material = material;
         this.mode = mode;
         this.ownerName = ownerName;
         this.ownerUuid = ownerUuid;
@@ -43,7 +39,9 @@ public class Pipette {
      * Update the pipette's sign with information regarding it
      * @return whether or not the update was successful. a false value should indicate the pipette should be unregistered.
      */
-    public boolean update() { return true; }
+    public boolean update() {
+        return !(getBlock().getType() != Material.SIGN_POST && getBlock().getType() != Material.WALL_SIGN);
+    }
 
     public Block getBlock() {
         return Bukkit.getWorld(world).getBlockAt(location[0], location[1], location[2]);
@@ -66,4 +64,13 @@ public class Pipette {
         targetsMe = newTargetsMe;
     }
 
+    @Override
+    public String toString() {
+        return "Pipette{" +
+                "location=" + new PrettyLocation(world, location) +
+                ", mode=" + mode +
+                ", ownerName='" + ownerName + '\'' +
+                ", ownerUuid=" + ownerUuid +
+                '}';
+    }
 }
